@@ -137,7 +137,7 @@ void electric_field( struct Structure This_Structure , float grid_span , int gri
             if( This_Structure.Residue[residue].Atom[atom].charge != 0 ) {
 
               distance = pythagoras( This_Structure.Residue[residue].Atom[atom].coord[1] , This_Structure.Residue[residue].Atom[atom].coord[2] , This_Structure.Residue[residue].Atom[atom].coord[3] , x_centre , y_centre , z_centre ) ;
-         
+
               if( distance < 2.0 ) distance = 2.0 ;
 
               if( distance >= 2.0 ) {

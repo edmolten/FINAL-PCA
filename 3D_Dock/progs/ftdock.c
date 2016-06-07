@@ -767,7 +767,7 @@ int main( int argc , char *argv[] ) {
       stime = (float)(end.tms_stime-start.tms_stime) / tcks;
       time = utime + stime;
       printf("PCA STOPS HERE\n");
-      printf("%f\n",time);
+      printf("time: %f\n",time);
       return 0;
       /* PCA: */
 

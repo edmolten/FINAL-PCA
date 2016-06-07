@@ -1,3 +1,5 @@
+import sys
+
 def get_data_from_file(file_name):
   output_file = open(file_name,"r")
   data = []
@@ -45,13 +47,13 @@ def compare(data_list1,data_list2):
         if score2 - 2 <= score1 <= score2 + 2:
           good_scores += 1
       if good_scores < 1:
-        return False
+				return False
       else:
         good_scores = 0
     if coords1 != coords2:
-      return False
+			return False
   return True
 
-data_list1 = get_data_from_file("out1")
-data_list2 = get_data_from_file("out2")
+data_list1 = get_data_from_file(sys.argv[1])
+data_list2 = get_data_from_file(sys.argv[2])
 print compare(data_list1,data_list2)
