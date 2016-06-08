@@ -28,4 +28,4 @@ while [  $EXEC -lt $NEXEC ]; do
     let EXEC=EXEC+1
 done
 finaltime=$(python -c "print $totaltime/$NEXEC")
-echo "Avarage user+sys time for" $NEXEC "executions -> " $finaltime
+echo "Avarage elapsed time for" $NEXEC "executions -> " $finaltime
