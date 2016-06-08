@@ -112,6 +112,35 @@ void electric_field( struct Structure This_Structure , float grid_span , int gri
 
 /************/
 
+//llenado de buffer de SimpleAtoms
+
+  int N = 0;
+  for(residue=1; residue<=This_Structure.length; residue++){
+    N += This_Structure.Residue[residue].size * residue;
+  } 
+  struct SimpleAtom * simple_atoms_buffer = malloc(sizeof(struct SimpleAtom)*N); //no se utilizara todo el espacio reservado, solo se guardaran atomos con carga
+  if (simple_atoms_buffer == NULL){
+      printf("Not enough memory. Dying\n");
+      exit(EXIT_FAILURE);
+  }
+  float charge;
+  float * coord; 
+  int atoms_in_buffer = 0;
+  for(residue=1; residue<=This_Structure.length; residue++){
+    for(atom=1; atom<=This_Structure.Residue[residue].size; atom++){
+      charge = This_Structure.Residue[residue].Atom[atom].charge;
+      coord = This_Structure.Residue[residue].Atom[atom].coord;
+      if(charge != 0){
+        simple_atoms_buffer[atoms_in_buffer].x = coord[1];
+        simple_atoms_buffer[atoms_in_buffer].y = coord[2];
+        simple_atoms_buffer[atoms_in_buffer].z = coord[3];	 
+        simple_atoms_buffer[atoms_in_buffer].charge = charge;     
+        atoms_in_buffer++;
+      }
+    }
+  }
+ //----fin de llenado 
+ 
   setvbuf( stdout , (char *)NULL , _IONBF , 0 ) ;
 
   printf( "  electric field calculations ( one dot / grid sheet ) " ) ;
@@ -132,39 +161,34 @@ void electric_field( struct Structure This_Structure , float grid_span , int gri
 
         phi = 0 ;
 
-        for( residue = 1 ; residue <= This_Structure.length ; residue ++ ) {
-          for( atom = 1 ; atom <= This_Structure.Residue[residue].size ; atom ++ ) {
+        for(atom = 0; atom<=atoms_in_buffer; atom++ ) {
 
-            if( This_Structure.Residue[residue].Atom[atom].charge != 0 ) {
+          distance = PYTHAGORAS(simple_atoms_buffer[atom].x, simple_atoms_buffer[atom].y, simple_atoms_buffer[atom].z, x_centre, y_centre, z_centre);
 
-              distance = PYTHAGORAS( This_Structure.Residue[residue].Atom[atom].coord[1] , This_Structure.Residue[residue].Atom[atom].coord[2] , This_Structure.Residue[residue].Atom[atom].coord[3] , x_centre , y_centre , z_centre ) ;
+          if( distance < 2.0 ) distance = 2.0 ;
 
-              if( distance < 2.0 ) distance = 2.0 ;
+          if( distance >= 8.0 ) {
 
-              if( distance >= 8.0 ) {
-
-                epsilon = 80 ;
-
-              }
-              
-              else if( distance <= 6.0 ) { 
-                
-                epsilon = 4 ;
-           
-              } 
-             
-              else {
-
-                epsilon = ( 38 * distance ) - 224 ;
-
-              }
-          
-              phi += ( This_Structure.Residue[residue].Atom[atom].charge / ( epsilon * distance ) ) ;
-
-            }
+            epsilon = 80 ;
 
           }
+          
+          else if( distance <= 6.0 ) { 
+            
+            epsilon = 4 ;
+       
+          } 
+         
+          else {
+
+            epsilon = ( 38 * distance ) - 224 ;
+
+          }
+      
+          phi += ( simple_atoms_buffer[atom].charge / ( epsilon * distance ) ) ;
+
         }
+        
 
         grid[gaddress(x,y,z,grid_size)] = (fftw_real)phi ;
 

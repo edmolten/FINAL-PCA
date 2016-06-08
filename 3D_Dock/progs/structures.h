@@ -86,6 +86,13 @@ struct Structure{
 	struct Amino_Acid	*Residue ;	
 } ;
 
+
+struct SimpleAtom{
+      float x;
+      float y;
+      float z;
+      float charge;  
+};
 /************/
 
 /* Angles structure */
