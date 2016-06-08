@@ -141,29 +141,25 @@ void electric_field( struct Structure This_Structure , float grid_span , int gri
 
               if( distance < 2.0 ) distance = 2.0 ;
 
-              if( distance >= 2.0 ) {
+              if( distance >= 8.0 ) {
 
-                if( distance >= 8.0 ) {
-
-                  epsilon = 80 ;
-
-                } else { 
-
-                  if( distance <= 6.0 ) { 
-
-                    epsilon = 4 ;
-             
-                  } else {
-
-                    epsilon = ( 38 * distance ) - 224 ;
-
-                  }
-
-                }
-  
-                phi += ( This_Structure.Residue[residue].Atom[atom].charge / ( epsilon * distance ) ) ;
+                epsilon = 80 ;
 
               }
+              
+              else if( distance <= 6.0 ) { 
+                
+                epsilon = 4 ;
+           
+              } 
+             
+              else {
+
+                epsilon = ( 38 * distance ) - 224 ;
+
+              }
+          
+              phi += ( This_Structure.Residue[residue].Atom[atom].charge / ( epsilon * distance ) ) ;
 
             }
 
