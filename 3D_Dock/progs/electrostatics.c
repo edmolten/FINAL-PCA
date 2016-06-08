@@ -25,6 +25,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#define PYTHAGORAS(x1,y1,z1,x2,y2,z2)( sqrt( ( ( (x1) - (x2) ) * ( (x1) - (x2) ) ) + ( ( (y1) - (y2) ) * ( (y1) - (y2) ) ) + ( ( (z1) - (z2) ) * ( (z1) - (z2) ) ) ) )
 
 #include "structures.h"
 

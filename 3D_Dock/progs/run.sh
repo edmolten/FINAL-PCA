@@ -6,6 +6,11 @@ test_output=../../outputs/test4.output
 make
 echo "Calculating one execution and comparing"
 ./ftdock -static $static -mobile $mobile > output
+
+timeline=`cat output | grep time:`
+time=`python -c "print '${timeline}'.split()[1]"`
+totaltime=`python -c "print str($time)"` 
+
 python diff.py $test_output output > diff_result
 exit_code=`cat diff_result`
 if [ "$exit_code" == "False" ]; then
@@ -14,8 +19,7 @@ if [ "$exit_code" == "False" ]; then
 fi
 echo "Correct results for the optimized program" 
 echo "Calculating average time for $NEXEC executions"
-EXEC=0
-totaltime=0
+EXEC=1
 while [  $EXEC -lt $NEXEC ]; do   
     ./ftdock -static $static -mobile $mobile > output
    	timeline=`cat output | grep time:`
@@ -24,4 +28,4 @@ while [  $EXEC -lt $NEXEC ]; do
     let EXEC=EXEC+1
 done
 finaltime=$(python -c "print $totaltime/$NEXEC")
-echo "Avarage elapsed time for" $NEXEC "executions -> " $finaltime
+echo "Avarage user+sys time for" $NEXEC "executions -> " $finaltime
